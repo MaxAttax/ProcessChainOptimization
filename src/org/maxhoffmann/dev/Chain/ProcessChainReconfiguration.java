@@ -1,10 +1,12 @@
 package org.maxhoffmann.dev.Chain;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.maxhoffmann.dev.object.ProcessChainEvaluation;
+import org.maxhoffmann.dev.object.ProcessChainObject;
 
 public class ProcessChainReconfiguration {
 
@@ -20,8 +22,6 @@ public class ProcessChainReconfiguration {
 	ArrayList<String> combinedChains = new ArrayList<String>();
 	String combinedChain = new String();
 
-	Collection<ArrayList<String>> combinedChainsCollection;
-
 	public ProcessChainReconfiguration(ProcessChainEvaluation evaluation,
 			ArrayList<String> listedChains) {
 		this.evaluation = evaluation;
@@ -34,6 +34,7 @@ public class ProcessChainReconfiguration {
 		workingChains = evaluation.getCurrentMainChains();
 		regularProcessChains = evaluation.getRegularProcessChains();
 		specialProcessChains = evaluation.getSpecialProcessChains();
+		
 
 		for (int i = 0; i < workingChains.size() - 1; i++) {
 			for (int j = 1 + i; j < workingChains.size(); j++) {
@@ -95,13 +96,12 @@ public class ProcessChainReconfiguration {
 		}
 	}
 
-	public void chainReformation() {
+	public Set<ProcessChainObject> chainReformation(int iterationNumber) {
 
-		int chainCounter = 1;
 		int distinctChainIndex = 0;
-
-		ArrayList<Integer> countSpecialChains = new ArrayList<Integer>();
-		ArrayList<Integer> subSpecialChains = new ArrayList<Integer>();
+		int iterationNum = iterationNumber;
+		
+		String bestSpecialChain = new String();
 
 		workingChains = evaluation.getCurrentMainChains();
 		regularProcessChains = evaluation.getRegularProcessChains();
@@ -120,6 +120,8 @@ public class ProcessChainReconfiguration {
 			}
 		}
 
+		Set<ProcessChainObject> distinctChains = new TreeSet<>();
+		
 		for (String specialChain : distinctSpecialChains) {
 			int countSpecialChain = 0;
 			int subSpecialChain = 0;
@@ -131,16 +133,37 @@ public class ProcessChainReconfiguration {
 					subSpecialChain++;
 				}
 			}
-			countSpecialChains.add(countSpecialChain);
-			subSpecialChains.add(subSpecialChain);
+			ProcessChainObject distinctChainObject = new ProcessChainObject();
+			distinctChainObject.setNumber(countSpecialChain);
+			distinctChainObject.setCountSub(subSpecialChain);
+			distinctChainObject.setProcessChain(specialChain);
+			distinctChains.add(distinctChainObject);
 		}
-
+		
 		LOGGER.info("\n");
-		for (int i = 0; i < distinctSpecialChains.size(); i++) {
-			LOGGER.info( countSpecialChains.get(i) + "\t"
-					+ subSpecialChains.get(i) + "\t"
-					+ distinctSpecialChains.get(i));
+		for (ProcessChainObject distinctProcessChain : distinctChains) {
+			LOGGER.info( distinctProcessChain.getNumber() + "\t"
+					+ distinctProcessChain.getCountSub() + "\t"
+					+ distinctProcessChain.getProcessChain());
 		}
+		
+		for (ProcessChainObject distinctProcessChain : distinctChains) {
+			bestSpecialChain = distinctProcessChain.getProcessChain();
+			break;
+		}
+		
+		workingChains.remove(1);
+		//workingChains.remove(workingChains.size() - 1 - iterationNum);
+		workingChains.add(bestSpecialChain);
+		
+		Set<ProcessChainObject> currentMainChains = new TreeSet<>();
+		for ( String chain : workingChains ) {
+			ProcessChainObject processChainObject = new ProcessChainObject();
+			processChainObject.setProcessChain(chain);
+			currentMainChains.add(processChainObject);
+		}
+		
+		return currentMainChains;
 
 	}
 

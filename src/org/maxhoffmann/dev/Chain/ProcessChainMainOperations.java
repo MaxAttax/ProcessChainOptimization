@@ -34,15 +34,24 @@ public class ProcessChainMainOperations {
 		this.mainChains = mainChains;
 		this.generatedChains = generatedChains;
 	}
+	
+	public void setMainChains(Set<ProcessChainObject> mainChains) {
+		this.mainChains = mainChains;
+	}
+	
+	public void setGeneratedChains(ArrayList<String> generatedChains) {
+		this.generatedChains = generatedChains;
+	}
 
 	public ProcessChainEvaluation chainResults() {
 
+		workingChains.clear();
 		for (ProcessChainObject mainChain : mainChains) {
 			String actualChain = mainChain.getProcessChain();
 			workingChains.add(actualChain);
 		}
 
-		LOGGER.info("Hauptprozessketten (A PRIORI):\n");
+		LOGGER.info("\nHauptprozessketten:\n");
 		for (int i = 0; i < workingChains.size(); i++) {
 			LOGGER.info((i + 1) + ".\tProzesskette:  " + workingChains.get(i));
 		}
@@ -89,7 +98,6 @@ public class ProcessChainMainOperations {
 				/ (regularChainsIteration.get(regularChainsIteration.size() - 1) + specialChainsIteration
 						.get(specialChainsIteration.size() - 1))
 				+ " %\t can not be manufactured using the current configuration.");
-		LOGGER.info("\n");
 
 		ProcessChainEvaluation evaluation = new ProcessChainEvaluation();
 		evaluation.setCurrentMainChains(workingChains);

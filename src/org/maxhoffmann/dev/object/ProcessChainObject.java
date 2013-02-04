@@ -24,6 +24,13 @@ public class ProcessChainObject implements Comparable<ProcessChainObject> {
 		this.countContainDiff = countContainDiff;
 		this.countSubDiff = countSubDiff;
 	}
+	
+	public ProcessChainObject(String processChain, int number,
+			int countSub) {
+		this.processChain = processChain;
+		this.number = number;
+		this.countSub = countSub;
+	}
 
 	public String getProcessChain() {
 		return processChain;
