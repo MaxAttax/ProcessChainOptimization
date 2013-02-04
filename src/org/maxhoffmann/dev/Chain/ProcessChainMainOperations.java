@@ -20,9 +20,6 @@ public class ProcessChainMainOperations {
 	ArrayList<String> regularProcessChains = new ArrayList<String>();
 	ArrayList<String> specialProcessChains = new ArrayList<String>();
 
-	int countRegularChains = 0;
-	int countSpecialChains = 0;
-
 	ArrayList<Integer> regularChainsIteration = new ArrayList<Integer>();
 	ArrayList<Integer> specialChainsIteration = new ArrayList<Integer>();
 
@@ -44,30 +41,31 @@ public class ProcessChainMainOperations {
 	}
 
 	public ProcessChainEvaluation chainResults() {
-
+		
 		workingChains.clear();
 		for (ProcessChainObject mainChain : mainChains) {
 			String actualChain = mainChain.getProcessChain();
 			workingChains.add(actualChain);
 		}
 
-		LOGGER.info("\nHauptprozessketten:\n");
+		LOGGER.info("\n\nHauptprozessketten:\n");
 		for (int i = 0; i < workingChains.size(); i++) {
 			LOGGER.info((i + 1) + ".\tProzesskette:  " + workingChains.get(i));
 		}
 
+		regularProcessChains.clear();
 		for (String chain : generatedChains) {
 			for (String workingChain : workingChains) {
 				if (workingChain.contains(chain)) {
 					regularProcessChains.add(chain);
-					countRegularChains++;
 					break;
 				}
 			}
 		}
 
 		regularChainsIteration.add(regularProcessChains.size());
-
+		
+		specialProcessChains.clear();
 		for (String chain : generatedChains) {
 			boolean equalChains = false;
 			for (String regularChain : regularProcessChains) {

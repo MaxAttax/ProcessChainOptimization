@@ -21,10 +21,21 @@ public class ProcessChainReconfiguration {
 	ArrayList<String> listedChains;
 	ArrayList<String> combinedChains = new ArrayList<String>();
 	String combinedChain = new String();
+	
+	public ProcessChainReconfiguration() {
+	}
 
 	public ProcessChainReconfiguration(ProcessChainEvaluation evaluation,
 			ArrayList<String> listedChains) {
 		this.evaluation = evaluation;
+		this.listedChains = listedChains;
+	}
+	
+	public void setEvaluation(ProcessChainEvaluation evaluation) {
+		this.evaluation = evaluation;
+	}
+	
+	public void setListedChains(ArrayList<String> listedChains) {
 		this.listedChains = listedChains;
 	}
 
@@ -152,8 +163,7 @@ public class ProcessChainReconfiguration {
 			break;
 		}
 		
-		workingChains.remove(1);
-		//workingChains.remove(workingChains.size() - 1 - iterationNum);
+		workingChains.remove(workingChains.size() - 1 - iterationNum);
 		workingChains.add(bestSpecialChain);
 		
 		Set<ProcessChainObject> currentMainChains = new TreeSet<>();

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
 public class RunAnalysis {
 
 	public static void main(String[] args) {
@@ -39,85 +38,59 @@ public class RunAnalysis {
 				.ProcessChainBuild(pohResult);
 
 		/**
-		 * sortAlgorithm - Possible values: 1 - Sort by total number chain 2 - Sort by the number of times the chain can
-		 * be found within the listed chains 3 - Sort by the number of sub chains that can be found within the listed
-		 * chains 4 - Sort by the number of contained chains excluding the process chains itself 5 - Sort by the number
-		 * of sub chains excluding the process chains itself.
+		 * sortAlgorithm - Possible values: 1 - Sort by total number chain 2 -
+		 * Sort by the number of times the chain can be found within the listed
+		 * chains 3 - Sort by the number of sub chains that can be found within
+		 * the listed chains 4 - Sort by the number of contained chains
+		 * excluding the process chains itself 5 - Sort by the number of sub
+		 * chains excluding the process chains itself.
 		 */
-		
+
 		int sortAlgorithm = 3;
 		int numMainChains = 4;
-		int iterationNum = 0;
-		
+
 		List<ProcessChainEvaluation> evaluationCollection = new ArrayList<ProcessChainEvaluation>();
-		
+
 		ProcessChainCounter chainCounter = new ProcessChainCounter();
 		ProcessChainMainOperations operations = new ProcessChainMainOperations();
-		
-		
-		Set<ProcessChainObject> mainProcessChains = chainCounter
-				.ProcessChainOperations(generatedChains, sortAlgorithm,
-						numMainChains);
-
-		operations.setMainChains(mainProcessChains);
-		operations.setGeneratedChains(generatedChains);
-		ProcessChainEvaluation evaluation = operations.chainResults();
-
-		evaluationCollection.add(evaluation);
-
-		ProcessChainReconfiguration configuration = new ProcessChainReconfiguration(
-				evaluationCollection.get(evaluationCollection.size() - 1),
-				generatedChains);
-		// configuration.chainCombination();
-		Set<ProcessChainObject> currentWorkingChains = configuration.chainReformation(iterationNum);
-		
-		iterationNum++;
-		
-		operations.setMainChains(currentWorkingChains);
-		operations.setGeneratedChains(generatedChains);
-		
-		ProcessChainEvaluation currentEvaluation = operations.chainResults();
-		
-		evaluationCollection.add(currentEvaluation);
-		
-		ProcessChainReconfiguration currentConfiguration = new ProcessChainReconfiguration(
-				evaluationCollection.get(evaluationCollection.size() - 1),
-				generatedChains);
-		// currentConfiguration.chainCombination();
-		Set<ProcessChainObject> newCurrentWorkingChains = currentConfiguration.chainReformation(iterationNum);
-		
-		
-iterationNum++;
-		
-ProcessChainMainOperations newCurrentOperations = new ProcessChainMainOperations(
-		newCurrentWorkingChains, generatedChains);
-ProcessChainEvaluation newCurrentEvaluation = newCurrentOperations.chainResults();
-
-evaluationCollection.add(newCurrentEvaluation);
-
-ProcessChainReconfiguration newCurrentConfiguration = new ProcessChainReconfiguration(
-		evaluationCollection.get(evaluationCollection.size() - 1),
-		generatedChains);
-// currentConfiguration.chainCombination();
-newCurrentConfiguration.chainReformation(iterationNum);
 
 		
+		Set<ProcessChainObject> currentWorkingChains = 
+				chainCounter.ProcessChainOperations(generatedChains, sortAlgorithm, numMainChains);
+
+		for ( int iterationNum = 0; iterationNum < numMainChains; iterationNum++) {
+			operations.setMainChains(currentWorkingChains);
+			operations.setGeneratedChains(generatedChains);
+			ProcessChainEvaluation evaluation = operations.chainResults();
+
+			evaluationCollection.add(evaluation);
+
+			ProcessChainReconfiguration configuration = new ProcessChainReconfiguration();
+			configuration.setEvaluation(evaluationCollection.get(evaluationCollection.size() - 1));
+			configuration.setListedChains(generatedChains);
+			// configuration.chainCombination();
+
+			currentWorkingChains = configuration.chainReformation(iterationNum);
+		}
 		
 		
-		
+
 		/*
-		 * ProcessChainTimeGeneration timeGenerator = new ProcessChainTimeGeneration(); ArrayList<String> chainTimes =
+		 * ProcessChainTimeGeneration timeGenerator = new
+		 * ProcessChainTimeGeneration(); ArrayList<String> chainTimes =
 		 * timeGenerator.GenerateChainTimes(pohResult);
 		 * 
-		 * ProcessChainTimeOperations timeOperations = new ProcessChainTimeOperations();
+		 * ProcessChainTimeOperations timeOperations = new
+		 * ProcessChainTimeOperations();
 		 * timeOperations.chainTimeOperations(generatedChains, chainTimes);
 		 */
 
 		/*
 		 * ProjectDAO projectDAO = new ProjectDAO();
 		 * 
-		 * long primaryIdProject001 = projectDAO.addProject("eins"); projectDAO.addProject("zwei"); long
-		 * primaryIdProject003 = projectDAO.addProject("drei");
+		 * long primaryIdProject001 = projectDAO.addProject("eins");
+		 * projectDAO.addProject("zwei"); long primaryIdProject003 =
+		 * projectDAO.addProject("drei");
 		 * 
 		 * projectDAO.listProjects();
 		 * 
@@ -131,16 +104,23 @@ newCurrentConfiguration.chainReformation(iterationNum);
 		 * 
 		 * ResourceGroupDAO resourceGroupDAO = new ResourceGroupDAO();
 		 * 
-		 * resourceGroupDAO.addResourceGroup("sawing", "R110", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("milling", "R160", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("drilling", "R150", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("assembling", "R310", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("quality controlling", "R340", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("grinding", "R200", primaryIdProject001);
-		 * resourceGroupDAO.addResourceGroup("turning", "R140", primaryIdProject001);
+		 * resourceGroupDAO.addResourceGroup("sawing", "R110",
+		 * primaryIdProject001); resourceGroupDAO.addResourceGroup("milling",
+		 * "R160", primaryIdProject001);
+		 * resourceGroupDAO.addResourceGroup("drilling", "R150",
+		 * primaryIdProject001); resourceGroupDAO.addResourceGroup("assembling",
+		 * "R310", primaryIdProject001);
+		 * resourceGroupDAO.addResourceGroup("quality controlling", "R340",
+		 * primaryIdProject001); resourceGroupDAO.addResourceGroup("grinding",
+		 * "R200", primaryIdProject001);
+		 * resourceGroupDAO.addResourceGroup("turning", "R140",
+		 * primaryIdProject001);
 		 * 
-		 * String searchedResourceGroup = resourceGroupDAO.searchResourceGroupDescription("R150");
-		 * System.out.println("Result of the returned ResourceGroup Description: '" + searchedResourceGroup + "'.\n");
+		 * String searchedResourceGroup =
+		 * resourceGroupDAO.searchResourceGroupDescription("R150");
+		 * System.out.println
+		 * ("Result of the returned ResourceGroup Description: '" +
+		 * searchedResourceGroup + "'.\n");
 		 * 
 		 * resourceGroupDAO.listResourceGroups();
 		 */
