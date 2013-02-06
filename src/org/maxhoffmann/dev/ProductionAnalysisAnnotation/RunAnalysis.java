@@ -58,19 +58,26 @@ public class RunAnalysis {
 		Set<ProcessChainObject> currentWorkingChains = 
 				chainCounter.ProcessChainOperations(generatedChains, sortAlgorithm, numMainChains);
 
+		
 		for ( int iterationNum = 0; iterationNum < numMainChains; iterationNum++) {
+			
 			operations.setMainChains(currentWorkingChains);
 			operations.setGeneratedChains(generatedChains);
+			operations.setIterationNumber(iterationNum);
+			operations.setIterationMax(numMainChains - 1);
+			
 			ProcessChainEvaluation evaluation = operations.chainResults();
 
 			evaluationCollection.add(evaluation);
 
 			ProcessChainReconfiguration configuration = new ProcessChainReconfiguration();
+			
 			configuration.setEvaluation(evaluationCollection.get(evaluationCollection.size() - 1));
 			configuration.setListedChains(generatedChains);
 			// configuration.chainCombination();
 
 			currentWorkingChains = configuration.chainReformation(iterationNum);
+			
 		}
 		
 		
@@ -93,13 +100,9 @@ public class RunAnalysis {
 		 * projectDAO.addProject("drei");
 		 * 
 		 * projectDAO.listProjects();
-		 * 
 		 * projectDAO.deleteProject(primaryIdProject003);
-		 * 
 		 * projectDAO.listProjects();
-		 * 
 		 * projectDAO.deleteProjectByStatus("zwei");
-		 * 
 		 * projectDAO.listProjects();
 		 * 
 		 * ResourceGroupDAO resourceGroupDAO = new ResourceGroupDAO();

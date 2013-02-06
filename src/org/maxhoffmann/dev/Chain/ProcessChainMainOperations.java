@@ -22,6 +22,9 @@ public class ProcessChainMainOperations {
 
 	ArrayList<Integer> regularChainsIteration = new ArrayList<Integer>();
 	ArrayList<Integer> specialChainsIteration = new ArrayList<Integer>();
+	
+	int iterationNum;
+	int iterationMax;
 
 	public ProcessChainMainOperations() {
 	}
@@ -39,6 +42,14 @@ public class ProcessChainMainOperations {
 	public void setGeneratedChains(ArrayList<String> generatedChains) {
 		this.generatedChains = generatedChains;
 	}
+	
+	public void setIterationNumber(int iterationNum) {
+		this.iterationNum = iterationNum;
+	}
+	
+	public void setIterationMax(int iterationMax) {
+		this.iterationMax = iterationMax;
+	}
 
 	public ProcessChainEvaluation chainResults() {
 		
@@ -48,7 +59,15 @@ public class ProcessChainMainOperations {
 			workingChains.add(actualChain);
 		}
 
-		LOGGER.info("\n\nHauptprozessketten:\n");
+		if (iterationNum == 0) {
+			LOGGER.info("\n\nHauptprozessketten (A priori):\n");
+		}
+		else if (iterationNum == iterationMax) {
+			LOGGER.info("\n\nHauptprozessketten (" + iterationNum + ". approximation / final):\n");
+		}
+		else {
+			LOGGER.info("\n\nHauptprozessketten (" + iterationNum + ". approximation):\n");
+		}
 		for (int i = 0; i < workingChains.size(); i++) {
 			LOGGER.info((i + 1) + ".\tProzesskette:  " + workingChains.get(i));
 		}

@@ -373,7 +373,7 @@ public class ProcessChainCounter {
 					+ countContainChainsDiff.get(n) + "\t  "
 					+ countSubChainsDiff.get(n) + "\t  " + processChains.get(n));
 		}
-		LOGGER.info("\n...\t...\t...\tinsgesamt " + processChains.size() + " Ketten.\n\n");
+		LOGGER.info("\n...\t...\t...\tinsgesamt " + processChains.size() + " Ketten.");
 		
 		return mainChains;
 	}
